@@ -142,57 +142,29 @@ desired effect
     <!-- Main content -->
     <section class="content">
       <div class="well">
-            <table class="table">
-              <thead><p id="parreg"><b>Búsqueda</b></p></thead>
-              <tbody>
-                <tr>
-                  <td>
-                    <div id="custom-search-input">
-                              <div class="input-group">
-                                  <input type="text" class="form-control input-lg" placeholder="Buscar" />
-                                  <span class="input-group-btn">
-                                      <button class="btn btn-info btn-lg" type="button">
-                                          <i class="glyphicon glyphicon-search"></i>
-                                      </button>
-                                  </span>
-                              </div>
-                          </div>
-                    </div>
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-            <table class="table table hover">
-              <tr>
-                <td>Nombre</td>
-                <td>Apellido</td>
-                <td>Cédula</td>
-                <td>Cargo</td>
-                <td>Fecha de registro</td>
-                <td>Id</td>
-                <td>Acciones</td>
-              </tr>
-              <?php if (isset($consulta)) { ?>
-                <?php foreach ($consulta->result() as $fila) { ?>
-              <tr>
-                <td><?= $fila->usuario_nombre; ?></td>
-                <td><?= $fila->usuario_apellido; ?></td>
-                <td><?= $fila->usuario_cedula; ?></td>
-                <td><?= $fila->usuario_cargo; ?></td>
-                <td><?= $fila->usuario_fecha_reg; ?></td>
-                <td><?= $fila->usuario_id; ?></td>
-                <td>
-                  <input name = "editar" type = "button" onclick = "editar(<?= $fila->usuario_id; ?>)" value = "EDITAR" />|
-                  <a href="<?php echo base_url(); ?>usuario/detalles">Ver Detalles</a> |
-                  <input name = "borrar" type = "button" onclick = "borrar_usuario3(<?= $fila->usuario_id; ?>)" value = "BORRAR" />|
-                  <a href="<?php echo base_url(); ?>usuario/cauciones">Caucion/Cauciones</a>
-                </td>
-              </tr>
-              <tr><td><?= validation_errors(); ?></td></tr>
-                  <?php } ?>
-              <?php } else{ echo '¡No se encontraron datos en la base de datos!';  }  ?>
-            </table>
-          </div>
+        <?php
+        //Habilita reporte de errores
+        error_reporting(E_ALL);
+        //Requiere el archivo connect_db para la conexion
+        require("connect_db.php");
+        //Si logra conectar a la base de datos, selecciona todos los datos de la tabla ts_persona
+        if ($result = $db->query("SELECT * FROM ts_persona")) {
+          if ($result->num_rows) {
+           while($row = $result->fetch_object()) {
+              echo $row->p_nombre, ' ', $row->p_apellido,'<br>';
+            }
+            //Muestra los datos con un arreglo predeterminado
+            echo '<pre>', print_r($row), '</pre>';
+          }
+        }
+        //De lo contrario, muestra el error involucrado
+        else {
+            die($db->error);
+        }
+        
+        ?>
+      </div>
+      
       <!-- Your Page Content Here -->
 
     </section>
@@ -217,6 +189,8 @@ desired effect
        immediately after the control sidebar -->
   <div class="control-sidebar-bg"></div>
 </div>
+
+
 <!-- ./wrapper -->
 
 <!-- REQUIRED JS SCRIPTS -->
